@@ -1,9 +1,11 @@
 package com.example.cravio.screens
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -20,24 +22,32 @@ import androidx.navigation.NavController
 import com.example.cravio.R
 import com.example.cravio.navigation.Routes
 import kotlinx.coroutines.delay
+import androidx.compose.ui.platform.LocalContext
+import com.example.cravio.utils.SharedPreferencesUtil
 
 private const val TAG = "SplashScreen"
 
 @Composable
 fun Splash(navController: NavController) {
-    var isshowSplash by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         try {
             delay(2000) // Shows Splash Screen for 2 seconds
-            navController.navigate(Routes.OnBoarding.routes) {
-                popUpTo(Routes.Splash.routes) {
-                    inclusive = true
+            if (SharedPreferencesUtil.isFirstLaunch(context)) {
+                navController.navigate(Routes.OnBoarding.routes) {
+                    popUpTo(Routes.Splash.routes) { inclusive = true }
+                }
+            } else if (SharedPreferencesUtil.isRegistered(context)) {
+                navController.navigate(Routes.Home.routes) {
+                    popUpTo(Routes.Splash.routes) { inclusive = true }
+                }
+            } else {
+                navController.navigate(Routes.Register.routes) {
+                    popUpTo(Routes.Splash.routes) { inclusive = true }
                 }
             }
         } catch (e: Exception) {
             Log.d(TAG, "Unknown Error Occured")
-        } finally {
-            isshowSplash = true
         }
     }
     SplashContent()

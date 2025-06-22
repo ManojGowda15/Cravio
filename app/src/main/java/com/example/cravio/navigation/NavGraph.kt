@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.cravio.screens.Home
 import com.example.cravio.screens.OnBoarding
 import com.example.cravio.screens.Splash
 import com.example.cravio.screens.OnBoardingScreen
@@ -26,7 +27,11 @@ fun NavGraph(navController: NavHostController) {
         }
 
         composable(Routes.Register.routes) {
-            Register()
+            Register(navController)
+        }
+
+        composable(Routes.Home.routes) {
+            Home()
         }
     }
 }
